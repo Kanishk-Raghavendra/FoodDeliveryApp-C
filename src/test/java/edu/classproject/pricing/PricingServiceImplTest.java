@@ -148,6 +148,20 @@ class PricingServiceImplTest {
         assertEquals(Money.of(7.94), breakdown.total());
     }
 
+    // Verifies a different promotion behavior using MinimumSubtotalPromotion.
+    // BIGORDER25 only applies when the cart subtotal reaches the configured minimum.
+    @Test
+    void calculatePrice_shouldApplyMinimumSubtotalPromoOnlyWhenThresholdIsMet() {
+        PricingService service = new PricingServiceImpl();
+
+        PriceBreakdown smallCartBreakdown = service.calculatePrice(sampleCart(), "BIGORDER25");
+        PriceBreakdown bigCartBreakdown = service.calculatePrice(bigCart(), "BIGORDER25");
+
+        assertEquals(Money.of(0.0), smallCartBreakdown.discount());
+        assertEquals(Money.of(1.25), bigCartBreakdown.discount());
+        assertEquals(Money.of(10.29), bigCartBreakdown.total());
+    }
+
     // Verifies empty-cart pricing behavior.
     // Expected: no subtotal, no delivery fee, no tax, no discount, and zero total.
     @Test
@@ -190,6 +204,18 @@ class PricingServiceImplTest {
                 List.of(
                         new CartLine("MI-1", "Burger", 2),
                         new CartLine("MI-2", "Fries", 1)
+                )
+        );
+    }
+
+    private Cart bigCart() {
+        return new Cart(
+                "CART-2",
+                "USR-1",
+                "RST-1",
+                List.of(
+                        new CartLine("MI-1", "Burger", 3),
+                        new CartLine("MI-2", "Fries", 2)
                 )
         );
     }

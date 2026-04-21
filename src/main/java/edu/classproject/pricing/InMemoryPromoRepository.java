@@ -23,7 +23,13 @@ public class InMemoryPromoRepository implements PromoRepository {
                 new PercentagePromotion("SAVE20", LocalDate.now().plusYears(5), 20.0),
                 new PercentagePromotion("HALF50", LocalDate.now().plusYears(5), 50.0),
                 new FixedAmountPromotion("FLAT5", LocalDate.now().plusYears(5), Money.of(5.0)),
-                new FixedAmountPromotion("WELCOME3", LocalDate.now().plusYears(5), Money.of(3.0))
+                new FixedAmountPromotion("WELCOME3", LocalDate.now().plusYears(5), Money.of(3.0)),
+                new MinimumSubtotalPromotion(
+                        "BIGORDER25",
+                        LocalDate.now().plusYears(5),
+                        Money.of(5.0),
+                        new PercentagePromotion("BIGORDER25-RULE", LocalDate.now().plusYears(5), 25.0)
+                )
         ));
     }
 
